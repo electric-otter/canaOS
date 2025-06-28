@@ -1,2 +1,0 @@
-Got load event
-Got error event

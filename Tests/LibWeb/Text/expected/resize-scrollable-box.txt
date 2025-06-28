@@ -1,2 +1,0 @@
-scrollLeft (before resize): 1130
-scrollLeft (after resize): 830

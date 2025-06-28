@@ -1,2 +1,0 @@
-Entered TestElement constructor, throwing.
-PASS! (Didn't crash)

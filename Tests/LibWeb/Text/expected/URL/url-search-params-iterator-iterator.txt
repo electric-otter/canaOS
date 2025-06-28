@@ -1,6 +1,0 @@
-[object Iterator]
-[object Iterator]
-true
-hello
-1
-[object Window]
