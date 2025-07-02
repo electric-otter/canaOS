@@ -18,30 +18,29 @@ if [ -z "$files" ]; then
 fi
 
 echo "Compiling C and C++ files..."
-# Compile all C and C++ files to object files
 obj_files=()
 for f in $files; do
-  # compile each file to .o in build directory
   out="build/$(basename "$f" | sed 's/\.[^.]*$/.o/')"
   gcc -c -ffreestanding -O2 -Wall -Wextra -I. -o "$out" "$f"
   obj_files+=("$out")
 done
 
 echo "Linking kernel..."
-# Link objects into a multiboot kernel ELF (adjust linker script path as needed)
-ld -n -o build/canaOS.elf -T linker.ld "${obj_files[@]}"
+ld -n -o build/kernel.bin -T linker.ld "${obj_files[@]}"
 
-# Copy kernel to ISO directory as kernel.bin
-cp build/canaOS.elf iso/boot/kernel.bin
+echo "Copying Kernel boot files to ISO..."
+cp -r Kernel/* iso/boot/
 
-# Compile Rust files (optional, simple approach)
+echo "Copying linked kernel.bin to ISO..."
+cp build/kernel.bin iso/boot/
+
+# Compile Rust files (optional)
 rust_files=$(find . -name "*.rs")
 if [ -n "$rust_files" ]; then
   echo "Compiling Rust files..."
   for f in $rust_files; do
     rustc "$f" --target x86_64-unknown-none --crate-type staticlib -o "build/$(basename "${f%.rs}.rlib")"
   done
-  # You may want to add Rust objects to linking — adapt as needed
 fi
 
 echo "Creating grub.cfg..."
